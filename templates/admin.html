@@ -201,6 +201,9 @@
         #content { flex-direction: column; padding: 16px 16px 40px; }
         #content-related { width: 100%; }
         #header, .breadcrumbs, ul.messagelist li { padding-left: 16px; padding-right: 16px; }
+        /* Let wide changelist tables scroll instead of overflowing the page */
+        .module { overflow-x: auto; }
+        table.results { min-width: 560px; }
     }
 </style>
 </head>

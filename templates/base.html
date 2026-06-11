@@ -9,6 +9,10 @@
 <body>
 <header class="navbar">
     <div class="brand"><a href="{{ url_for('index') }}">🎯 NumberQuest</a></div>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+    </label>
     <nav>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('play') }}">Play</a>

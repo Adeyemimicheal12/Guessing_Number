@@ -41,6 +41,14 @@ a:hover { text-decoration: underline; }
 .navbar nav a { color: var(--muted); font-weight: 500; }
 .navbar nav a:hover { color: var(--text); text-decoration: none; }
 
+/* Hamburger toggle (hidden on desktop, shown on mobile) */
+.nav-toggle-label { display: none; cursor: pointer; padding: 0.4rem; }
+.nav-toggle-label span {
+    display: block; width: 26px; height: 2px; margin: 5px 0;
+    background: var(--text); border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+}
+
 /* Layout */
 .container { flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem; }
 .footer { text-align: center; padding: 1.5rem; color: var(--muted); font-size: 0.9rem; }
@@ -1053,4 +1061,63 @@ a.contact-card:hover {
 @media (max-width: 760px) {
     .admin-columns { grid-template-columns: 1fr; }
     .admin-hero-meta { text-align: left; }
+}
+
+/* ===== Global mobile / responsive layout ===== */
+@media (max-width: 768px) {
+    /* Collapsing navbar */
+    .navbar { padding: 0.9rem 1.1rem; flex-wrap: nowrap; }
+    .nav-toggle-label { display: block; }
+    .navbar nav {
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.2rem;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.3s ease, opacity 0.25s ease;
+    }
+    .nav-toggle:checked ~ nav {
+        max-height: 80vh;
+        opacity: 1;
+        margin-top: 0.6rem;
+    }
+    .navbar nav a {
+        padding: 0.7rem 0.4rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .navbar nav a.btn-small { text-align: center; margin-top: 0.4rem; border-bottom: none; }
+    /* Animate hamburger into an X when open */
+    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(2) { opacity: 0; }
+    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Tighter page padding */
+    .container { padding: 1.5rem 1rem; }
+
+    /* Heroes scale down */
+    .hero h1 { font-size: 2.2rem; }
+    .home-hero { padding: 2.4rem 1.2rem 2rem; border-radius: 18px; }
+    .home-hero h1 { font-size: 2.3rem; }
+    .home-hero .tagline { font-size: 1rem; }
+    .play-hero, .lb-hero, .contact-hero, .feedback-aside { padding: 1.8rem 1.2rem; }
+    .play-hero h2, .lb-hero h2, .contact-hero h2 { font-size: 1.6rem; }
+
+    /* Stats bar stacks */
+    .stats-bar { flex-direction: column; gap: 0.4rem; text-align: center; }
+
+    /* Tables scroll horizontally instead of overflowing */
+    .panel, .lb-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .data-table { min-width: 480px; }
+}
+
+@media (max-width: 480px) {
+    .hero h1, .home-hero h1 { font-size: 1.9rem; }
+    .btn, .btn-lg { width: 100%; margin: 0.3rem 0; text-align: center; }
+    .home-cta .btn, .game-over .btn { width: 100%; }
+    .guess-form { flex-direction: column; }
+    .guess-form .btn { width: 100%; }
+    .stat-cards, .info-grid, .play-grid, .feature-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 0.8rem 1.5rem; }
 }
