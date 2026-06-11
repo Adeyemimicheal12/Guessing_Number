@@ -1066,8 +1066,9 @@ a.contact-card:hover {
 /* ===== Global mobile / responsive layout ===== */
 @media (max-width: 768px) {
     /* Collapsing navbar */
-    .navbar { padding: 0.9rem 1.1rem; flex-wrap: nowrap; }
-    .nav-toggle-label { display: block; }
+    .navbar { padding: 0.9rem 1.1rem; flex-wrap: wrap; }
+    .brand { flex: 1; }
+    .nav-toggle-label { display: block; margin-left: auto; }
     .navbar nav {
         flex-basis: 100%;
         flex-direction: column;
