@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Choose Level &middot; NumberQuest{% endblock %}
+{% block content %}
+
+<section class="play-hero">
+    <span class="play-hero-emoji">🎯</span>
+    <h2>Choose Your Challenge</h2>
+    <p class="muted">Pick a difficulty and we'll generate a secret number for you to track down.
+    Fewer guesses mean a higher score &mdash; how sharp is your instinct?</p>
+</section>
+
+{% set meta = {
+    'low':      {'icon': '🟢', 'tag': 'Beginner',  'desc': 'A gentle warm-up. Great for getting a feel for the game.'},
+    'moderate': {'icon': '🟡', 'tag': 'Challenger', 'desc': 'A wider range and more room to think. The sweet spot.'},
+    'expert':   {'icon': '🔴', 'tag': 'Mastermind', 'desc': 'Four-digit territory. For players who love a real hunt.'}
+} %}
+
+<div class="play-grid">
+    {% for key, lvl in levels.items() %}
+    {% set m = meta[key] %}
+    <div class="play-card play-{{ key }}">
+        <div class="play-card-top">
+            <span class="play-icon">{{ m.icon }}</span>
+            <span class="play-tag">{{ m.tag }}</span>
+        </div>
+        <h3>{{ lvl.label }}</h3>
+        <p class="play-desc">{{ m.desc }}</p>
+
+        <div class="play-range">
+            <span class="range-label">Guess a number between</span>
+            <span class="range-nums"><b>0</b> &ndash; <b>{{ lvl.max }}</b></span>
+        </div>
+
+        <ul class="play-specs">
+            <li><span class="spec-icon">🎲</span> {{ lvl.attempts }} attempts allowed</li>
+            <li><span class="spec-icon">⭐</span> Up to {{ lvl.base }} points</li>
+        </ul>
+
+        <a class="btn btn-block" href="{{ url_for('start_game', level=key) }}">Play {{ lvl.label }}</a>
+    </div>
+    {% endfor %}
+</div>
+
+<p class="play-foot muted">💡 The faster you guess, the more points you keep. Good luck!</p>
+
+{% endblock %}

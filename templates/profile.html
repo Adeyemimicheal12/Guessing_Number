@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Profile &middot; NumberQuest{% endblock %}
+{% block content %}
+{% set win_rate = ((user.wins / user.games_played) * 100) | round(0, 'floor') | int if user.games_played else 0 %}
+
+<section class="profile-hero">
+    <div class="profile-avatar">{{ user.username[0] | upper }}</div>
+    <div class="profile-identity">
+        <h2>{{ user.username }}</h2>
+        <p class="profile-meta">
+            <span>✉️ {{ user.email }}</span>
+            <span>📅 Member since {{ user.created_at.strftime('%d %b %Y') }}</span>
+        </p>
+        <div class="profile-badges">
+            {% if user.is_admin %}<span class="badge badge-admin">Administrator</span>{% endif %}
+            {% if user.best_score >= 800 %}<span class="badge badge-elite">⭐ Elite Player</span>
+            {% elif user.wins >= 5 %}<span class="badge badge-pro">🔥 Pro Player</span>
+            {% elif user.games_played > 0 %}<span class="badge badge-rookie">🌱 Rookie</span>
+            {% else %}<span class="badge badge-new">👋 New Player</span>{% endif %}
+        </div>
+    </div>
+    <div class="profile-winrate">
+        <div class="winrate-ring" style="--pct: {{ win_rate }}">
+            <span class="winrate-num">{{ win_rate }}%</span>
+        </div>
+        <span class="winrate-label">Win Rate</span>
+    </div>
+</section>
+
+<div class="stat-cards premium">
+    <div class="stat stat-icon">
+        <span class="stat-emoji">🎮</span>
+        <span class="num">{{ user.games_played }}</span>
+        <span class="stat-label">Games Played</span>
+    </div>
+    <div class="stat stat-icon">
+        <span class="stat-emoji">🏆</span>
+        <span class="num">{{ user.wins }}</span>
+        <span class="stat-label">Wins</span>
+    </div>
+    <div class="stat stat-icon">
+        <span class="stat-emoji">⚡</span>
+        <span class="num">{{ user.best_score }}</span>
+        <span class="stat-label">Best Score</span>
+    </div>
+    <div class="stat stat-icon">
+        <span class="stat-emoji">💎</span>
+        <span class="num">{{ user.total_score }}</span>
+        <span class="stat-label">Total Score</span>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel-header">
+        <h3>Recent Activity</h3>
+        <a class="btn-small" href="{{ url_for('play') }}">+ New Game</a>
+    </div>
+    {% if recent %}
+    <table class="data-table activity-table">
+        <thead><tr><th>Level</th><th>Result</th><th>Attempts</th><th>Points</th><th>Played</th></tr></thead>
+        <tbody>
+            {% for s in recent %}
+            <tr>
+                <td><span class="lvl-pill lvl-{{ s.level }}">{{ s.level|capitalize }}</span></td>
+                <td>
+                    {% if s.won %}<span class="result-badge result-win">Win</span>
+                    {% else %}<span class="result-badge result-loss">Loss</span>{% endif %}
+                </td>
+                <td>{{ s.attempts }}</td>
+                <td class="pts">{{ s.points }}</td>
+                <td class="muted">{{ s.played_at.strftime('%d %b %Y · %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-emoji">🎯</span>
+        <p>You haven't played any games yet.</p>
+        <a class="btn" href="{{ url_for('play') }}">Play Your First Game</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

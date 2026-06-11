@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site administration | NumberQuest admin</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: "Roboto", "Segoe UI", -apple-system, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        background: #fff;
+        line-height: 1.45;
+    }
+    a { color: #447e9b; text-decoration: none; }
+    a:hover { color: #036; }
+
+    /* Header */
+    #header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 14px 40px;
+        background: #417690;
+        color: #ffc;
+        line-height: 1.2;
+    }
+    #branding h1 { margin: 0; font-weight: 300; font-size: 22px; }
+    #branding h1 a { color: #f5dd5d; }
+    #branding h1 a:hover { color: #f5dd5d; }
+    #user-tools {
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-align: right;
+        color: #fff;
+    }
+    #user-tools a { border-bottom: 1px solid rgba(255,255,255,0.25); color: #fff; }
+    #user-tools a:hover { color: #fff; border-bottom-color: #fff; }
+    .user-sep { margin: 0 4px; }
+
+    /* Breadcrumbs */
+    .breadcrumbs {
+        background: #79aec8;
+        padding: 10px 40px;
+        color: #fff;
+        font-size: 14px;
+        border-top: 1px solid #fff;
+    }
+    .breadcrumbs a { color: #fff; }
+    .breadcrumbs a:hover { color: #c4dce8; }
+
+    /* Messages */
+    ul.messagelist { padding: 0; margin: 0; }
+    ul.messagelist li {
+        list-style: none;
+        padding: 12px 40px;
+        font-size: 13px;
+        color: #fff;
+        background: #70bf2b;
+    }
+    ul.messagelist li.danger  { background: #ba2121; }
+    ul.messagelist li.warning { background: #f9a825; color: #333; }
+    ul.messagelist li.info    { background: #79aec8; }
+
+    /* Layout */
+    #container { padding: 0; }
+    #content {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        padding: 20px 40px 60px;
+    }
+    #content-main { flex: 1; min-width: 0; }
+    #content-related {
+        width: 270px;
+        flex-shrink: 0;
+    }
+    h1.page-title { font-weight: 300; font-size: 20px; margin: 0 0 18px; color: #333; }
+
+    /* Modules */
+    .module {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .module > h2, .module caption {
+        margin: 0;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-align: left;
+        background: #79aec8;
+        color: #fff;
+    }
+    #content-related .module > h2 { background: #417690; }
+
+    /* App / model index rows */
+    table.app-table { width: 100%; border-collapse: collapse; }
+    table.app-table th, table.app-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        vertical-align: middle;
+    }
+    table.app-table tbody tr:last-child th,
+    table.app-table tbody tr:last-child td { border-bottom: none; }
+    table.app-table th { font-weight: 400; }
+    table.app-table th a { font-weight: 600; }
+    .model-row:hover { background: #f6f6f6; }
+    td.action-col { text-align: right; white-space: nowrap; }
+
+    /* Changelist results */
+    table.results { width: 100%; border-collapse: collapse; }
+    table.results thead th {
+        padding: 8px 12px;
+        background: #f6f6f6;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #666;
+        white-space: nowrap;
+    }
+    table.results tbody td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+    table.results tbody tr.row1 { background: #fff; }
+    table.results tbody tr.row2 { background: #f9f9f9; }
+    table.results tbody tr:hover { background: #f0f6fa; }
+    table.results td.num { text-align: right; }
+    .muted-cell { color: #999; }
+
+    /* Tags */
+    .tag {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .tag-admin  { background: #417690; color: #fff; }
+    .tag-player { background: #e3eef3; color: #417690; }
+    .tag-win    { background: #dff0d8; color: #3c763d; }
+    .tag-loss   { background: #f2dede; color: #a94442; }
+    .lvl-low      { color: #2e7d32; font-weight: 600; }
+    .lvl-moderate { color: #b7791f; font-weight: 600; }
+    .lvl-expert   { color: #c0392b; font-weight: 600; }
+
+    /* Buttons */
+    .button, button.button {
+        display: inline-block;
+        background: #79aec8;
+        color: #fff;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .button:hover { background: #609ab6; color: #fff; }
+    .deletelink {
+        background: #ba2121;
+    }
+    .deletelink:hover { background: #a41515; color: #fff; }
+    form.inline-form { display: inline; margin: 0; }
+
+    /* Recent actions list */
+    ul.actionlist { margin: 0; padding: 0; list-style: none; }
+    ul.actionlist li {
+        padding: 8px 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+    }
+    ul.actionlist li:last-child { border-bottom: none; }
+    ul.actionlist .ts { display: block; color: #999; font-size: 11px; margin-top: 2px; }
+
+    /* Stat module */
+    table.stat-table td { padding: 9px 12px; border-bottom: 1px solid #eee; }
+    table.stat-table tr:last-child td { border-bottom: none; }
+    table.stat-table td.val { text-align: right; font-weight: 700; color: #417690; }
+
+    .empty { padding: 14px 12px; color: #999; }
+
+    @media (max-width: 800px) {
+        #content { flex-direction: column; padding: 16px 16px 40px; }
+        #content-related { width: 100%; }
+        #header, .breadcrumbs, ul.messagelist li { padding-left: 16px; padding-right: 16px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="header">
+    <div id="branding">
+        <h1><a href="{{ url_for('admin') }}">NumberQuest administration</a></h1>
+    </div>
+    <div id="user-tools">
+        WELCOME,
+        <strong>{{ (current_user.username if current_user else 'GUEST') | upper }}</strong>
+        <span class="user-sep">/</span>
+        <a href="{{ url_for('index') }}">VIEW SITE</a>
+        {% if current_user %}
+        <span class="user-sep">/</span>
+        <a href="{{ url_for('logout') }}">LOG OUT</a>
+        {% else %}
+        <span class="user-sep">/</span>
+        <a href="{{ url_for('login') }}">LOG IN</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="breadcrumbs">
+    <a href="{{ url_for('index') }}">Home</a> &rsaquo; Site administration
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="messagelist">
+        {% for category, msg in messages %}
+        <li class="{{ category }}">{{ msg }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endwith %}
+
+<div id="container">
+<div id="content">
+
+    <!-- Main column -->
+    <div id="content-main">
+        <h1 class="page-title">Site administration</h1>
+
+        <!-- Authentication / Users module -->
+        <div class="module">
+            <h2>Authentication and Authorisation</h2>
+            <table class="app-table">
+                <tr class="model-row">
+                    <th scope="row"><a href="#users">Users</a></th>
+                    <td class="muted-cell">{{ users|length }} record(s)</td>
+                    <td class="action-col"><a href="{{ url_for('register') }}" class="button">+ Add</a></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Game module -->
+        <div class="module">
+            <h2>Game</h2>
+            <table class="app-table">
+                <tr class="model-row">
+                    <th scope="row"><a href="#scores">Scores</a></th>
+                    <td class="muted-cell">{{ total_games }} record(s)</td>
+                    <td class="action-col"><a href="{{ url_for('play') }}" class="button">+ Play</a></td>
+                </tr>
+                <tr class="model-row">
+                    <th scope="row"><a href="#feedback">Feedback</a></th>
+                    <td class="muted-cell">{{ feedbacks|length }} record(s)</td>
+                    <td class="action-col"><a href="{{ url_for('feedback') }}" class="button">+ Add</a></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Users changelist -->
+        <div class="module" id="users">
+            <h2>Select user to change &mdash; {{ users|length }} total</h2>
+            <table class="results">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Username</th><th>Email address</th><th>Role</th>
+                        <th>Games</th><th>Wins</th><th>Best score</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr class="{{ 'row1' if loop.index is odd else 'row2' }}">
+                        <td class="muted-cell">{{ u.id }}</td>
+                        <td><strong>{{ u.username }}</strong></td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            {% if u.is_admin %}<span class="tag tag-admin">Staff</span>
+                            {% else %}<span class="tag tag-player">Player</span>{% endif %}
+                        </td>
+                        <td class="num">{{ u.games_played }}</td>
+                        <td class="num">{{ u.wins }}</td>
+                        <td class="num">{{ u.best_score }}</td>
+                        <td>
+                            {% if not u.is_admin %}
+                            <form class="inline-form" method="post"
+                                  action="{{ url_for('delete_user', user_id=u.id) }}"
+                                  onsubmit="return confirm('Are you sure you want to delete the user &quot;{{ u.username }}&quot;? All related scores will also be deleted.');">
+                                <button type="submit" class="button deletelink">Delete</button>
+                            </form>
+                            {% else %}<span class="muted-cell">&mdash;</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scores changelist -->
+        <div class="module" id="scores">
+            <h2>Recent scores</h2>
+            {% if recent_scores %}
+            <table class="results">
+                <thead>
+                    <tr><th>Player</th><th>Level</th><th>Result</th><th>Attempts</th><th>Points</th><th>Played at</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in recent_scores %}
+                    <tr class="{{ 'row1' if loop.index is odd else 'row2' }}">
+                        <td>{{ s.user.username if s.user else '—' }}</td>
+                        <td class="lvl-{{ s.level }}">{{ s.level | capitalize }}</td>
+                        <td>
+                            {% if s.won %}<span class="tag tag-win">Win</span>
+                            {% else %}<span class="tag tag-loss">Loss</span>{% endif %}
+                        </td>
+                        <td class="num">{{ s.attempts }}</td>
+                        <td class="num">{{ s.points }}</td>
+                        <td class="muted-cell">{{ s.played_at.strftime('%d %b %Y, %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty">0 scores recorded.</p>
+            {% endif %}
+        </div>
+
+        <!-- Feedback changelist -->
+        <div class="module" id="feedback">
+            <h2>Select feedback to change &mdash; {{ feedbacks|length }} total</h2>
+            {% if feedbacks %}
+            <table class="results">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>Message</th><th>Submitted</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for f in feedbacks %}
+                    <tr class="{{ 'row1' if loop.index is odd else 'row2' }}">
+                        <td>{{ f.name or '—' }}</td>
+                        <td>{{ f.email or '—' }}</td>
+                        <td>{{ f.message }}</td>
+                        <td class="muted-cell">{{ f.submitted_at.strftime('%d %b %Y') }}</td>
+                        <td>
+                            <form class="inline-form" method="post" action="{{ url_for('delete_feedback', fid=f.id) }}">
+                                <button type="submit" class="button deletelink">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty">0 feedback items.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="content-related">
+        <div class="module">
+            <h2>Site statistics</h2>
+            <table class="stat-table">
+                <tr><td>Users</td><td class="val">{{ users|length }}</td></tr>
+                <tr><td>Games played</td><td class="val">{{ total_games }}</td></tr>
+                <tr><td>Wins</td><td class="val">{{ total_wins }}</td></tr>
+                <tr><td>Win rate</td><td class="val">{{ win_rate }}%</td></tr>
+                <tr><td>Points awarded</td><td class="val">{{ '{:,}'.format(total_points) }}</td></tr>
+                <tr><td>Feedback</td><td class="val">{{ feedbacks|length }}</td></tr>
+            </table>
+        </div>
+
+        <div class="module">
+            <h2>Games by difficulty</h2>
+            <table class="stat-table">
+                {% for key, lvl in levels.items() %}
+                <tr><td class="lvl-{{ key }}">{{ lvl.label }}</td><td class="val">{{ level_counts[key] }}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="module">
+            <h2>Recent actions</h2>
+            {% if recent_scores %}
+            <ul class="actionlist">
+                {% for s in recent_scores %}
+                <li>
+                    <strong>{{ s.user.username if s.user else '—' }}</strong>
+                    {{ 'won' if s.won else 'lost' }} a
+                    <span class="lvl-{{ s.level }}">{{ s.level }}</span> game
+                    <span class="ts">{{ s.played_at.strftime('%d %b %Y, %H:%M') }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">None available</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>

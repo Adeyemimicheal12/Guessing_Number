@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Feedback &middot; NumberQuest{% endblock %}
+{% block content %}
+<section class="feedback-wrap">
+    <aside class="feedback-aside">
+        <span class="feedback-emoji">💬</span>
+        <h2>We'd love your feedback</h2>
+        <p class="muted">Your thoughts help us make NumberQuest better for everyone. Tell us what you love, what's missing, or what could be improved.</p>
+        <ul class="feedback-points">
+            <li><span class="fp-icon">⚡</span> Takes less than a minute</li>
+            <li><span class="fp-icon">🔒</span> Your details stay private</li>
+            <li><span class="fp-icon">🚀</span> Directly shapes new features</li>
+        </ul>
+        <div class="feedback-quote">
+            “Great games are built on great feedback.”
+        </div>
+    </aside>
+
+    <div class="feedback-card">
+        <h3>Send us a message</h3>
+        <p class="muted">Fields marked <span class="req">*</span> are required.</p>
+        <form method="post" novalidate class="feedback-form">
+            <div class="field-row">
+                <label class="field">
+                    <span class="field-label">Name</span>
+                    <input type="text" name="name"
+                           placeholder="Your name"
+                           value="{{ current_user.username if current_user else '' }}">
+                </label>
+                <label class="field">
+                    <span class="field-label">Email</span>
+                    <input type="email" name="email"
+                           placeholder="you@example.com"
+                           value="{{ current_user.email if current_user else '' }}">
+                </label>
+            </div>
+            <label class="field">
+                <span class="field-label">Your Feedback <span class="req">*</span></span>
+                <textarea name="message" rows="6" required maxlength="1000"
+                          placeholder="Tell us what you think..."
+                          oninput="document.getElementById('charcount').textContent = this.value.length"></textarea>
+                <span class="char-hint"><span id="charcount">0</span> / 1000</span>
+            </label>
+            <button class="btn btn-block" type="submit">Send Feedback ✈️</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

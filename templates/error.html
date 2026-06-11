@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }} &middot; NumberQuest{% endblock %}
+{% block content %}
+<div class="error-box">
+    <h1>{{ code }}</h1>
+    <p>{{ message }}</p>
+    <a class="btn" href="{{ url_for('index') }}">Back to Home</a>
+</div>
+{% endblock %}

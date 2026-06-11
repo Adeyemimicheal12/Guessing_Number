@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Contact Us &middot; NumberQuest{% endblock %}
+{% block content %}
+<section class="contact-hero">
+    <span class="contact-hero-emoji">📞</span>
+    <h2>Get in Touch</h2>
+    <p class="muted">Have questions, ideas, or need a hand? The NumberQuest team is here to help.</p>
+</section>
+
+<div class="contact-grid">
+    <a class="contact-card" href="mailto:support@numberquest.com">
+        <span class="cc-icon">✉️</span>
+        <h3>Email Us</h3>
+        <p class="cc-value">support@numberquest.com</p>
+        <span class="cc-note">We reply within 24 hours</span>
+    </a>
+    <a class="contact-card" href="tel:+15551234567">
+        <span class="cc-icon">📱</span>
+        <h3>Call Us</h3>
+        <p class="cc-value">+1 (555) 123-4567</p>
+        <span class="cc-note">Mon – Fri, 9 AM – 6 PM</span>
+    </a>
+    <div class="contact-card">
+        <span class="cc-icon">📍</span>
+        <h3>Visit Us</h3>
+        <p class="cc-value">123 Logic Lane, Tech Park</p>
+        <span class="cc-note">Innovation City, 560001</span>
+    </div>
+    <div class="contact-card">
+        <span class="cc-icon">🕒</span>
+        <h3>Working Hours</h3>
+        <p class="cc-value">Mon – Fri</p>
+        <span class="cc-note">9:00 AM – 6:00 PM</span>
+    </div>
+</div>
+
+<section class="contact-banner">
+    <div>
+        <h3>Prefer to share your thoughts?</h3>
+        <p class="muted">Send us your suggestions and feedback directly through our feedback form.</p>
+    </div>
+    <a class="btn" href="{{ url_for('feedback') }}">Submit Feedback 💬</a>
+</section>
+{% endblock %}

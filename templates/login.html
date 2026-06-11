@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Login &middot; NumberQuest{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+    <aside class="auth-aside">
+        <span class="auth-emoji">🎯</span>
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to pick up where you left off, climb the leaderboard, and keep your streak alive.</p>
+        <ul class="auth-points">
+            <li><span class="ap-icon">🏆</span> Track your wins &amp; best scores</li>
+            <li><span class="ap-icon">📈</span> Compete on the global leaderboard</li>
+            <li><span class="ap-icon">🔒</span> Your progress, always saved</li>
+        </ul>
+    </aside>
+
+    <div class="auth-card">
+        <h3>Login</h3>
+        <p class="auth-sub muted">Enter your credentials to continue.</p>
+        <form method="post" novalidate class="auth-form">
+            <label class="field">
+                <span class="field-label">Username</span>
+                <input type="text" name="username" placeholder="Your username" required autofocus>
+            </label>
+            <label class="field">
+                <span class="field-label">Password</span>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </label>
+            <button class="btn btn-block btn-shine" type="submit">Login</button>
+        </form>
+        <p class="auth-foot muted">No account yet? <a href="{{ url_for('register') }}">Create one</a></p>
+    </div>
+</div>
+{% endblock %}

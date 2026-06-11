@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Register &middot; NumberQuest{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+    <aside class="auth-aside">
+        <span class="auth-emoji">🚀</span>
+        <h2>Join NumberQuest</h2>
+        <p class="muted">Create a free account and start your climb. Three levels, one leaderboard, endless bragging rights.</p>
+        <ul class="auth-points">
+            <li><span class="ap-icon">⚡</span> Free forever — no card needed</li>
+            <li><span class="ap-icon">🎮</span> Three escalating difficulty levels</li>
+            <li><span class="ap-icon">⭐</span> Earn points &amp; rank up globally</li>
+        </ul>
+    </aside>
+
+    <div class="auth-card">
+        <h3>Create an Account</h3>
+        <p class="auth-sub muted">It only takes a moment to get started.</p>
+        <form method="post" novalidate class="auth-form">
+            <label class="field">
+                <span class="field-label">Username</span>
+                <input type="text" name="username" placeholder="Pick a username" minlength="3" required autofocus>
+            </label>
+            <label class="field">
+                <span class="field-label">Email</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <div class="field-row">
+                <label class="field">
+                    <span class="field-label">Password</span>
+                    <input type="password" name="password" placeholder="••••••••" minlength="6" required>
+                </label>
+                <label class="field">
+                    <span class="field-label">Confirm Password</span>
+                    <input type="password" name="confirm" placeholder="••••••••" minlength="6" required>
+                </label>
+            </div>
+            <button class="btn btn-block btn-shine" type="submit">Create Account</button>
+        </form>
+        <p class="auth-foot muted">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Playing &middot; NumberQuest{% endblock %}
+{% block content %}
+<div class="game-box">
+    <h2>{{ cfg.label }} Level</h2>
+    <p class="muted">Guess a number between <strong>0</strong> and <strong>{{ cfg.max }}</strong>.</p>
+
+    <div class="stats-bar">
+        <span>Attempts used: <strong>{{ g.attempts }}</strong> / {{ g.max_attempts }}</span>
+        <span>Remaining: <strong>{{ remaining }}</strong></span>
+    </div>
+
+    {% if message %}
+        <div class="flash flash-{{ message_type }}">{{ message }}</div>
+    {% endif %}
+
+    {% if not g.finished %}
+    <form method="post" class="guess-form">
+        <input type="number" name="guess" min="0" max="{{ cfg.max }}"
+               placeholder="Enter your guess" required autofocus>
+        <button class="btn" type="submit">Guess</button>
+    </form>
+    {% else %}
+    <div class="game-over">
+        <a class="btn" href="{{ url_for('start_game', level=g.level) }}">Play Again</a>
+        <a class="btn btn-outline" href="{{ url_for('play') }}">Change Level</a>
+        <a class="btn btn-outline" href="{{ url_for('leaderboard') }}">Leaderboard</a>
+    </div>
+    {% endif %}
+
+    {% if g.history %}
+    <h3>Your Guesses</h3>
+    <ul class="history">
+        {% for guess, hint in g.history %}
+        <li class="hint-{{ 'ok' if hint == 'correct' else 'no' }}">
+            <span class="guess-val">{{ guess }}</span>
+            <span class="guess-hint">{{ hint }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endblock %}

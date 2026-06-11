@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard &middot; NumberQuest{% endblock %}
+{% block content %}
+<section class="lb-hero">
+    <span class="lb-hero-emoji">🏆</span>
+    <h2>Leaderboard</h2>
+    <p class="muted">The sharpest minds in NumberQuest, ranked by best score and wins.</p>
+</section>
+
+{% if players %}
+    {% set top = players[:3] %}
+    {% set rest = players[3:] %}
+
+    {# ---- Podium for top 3 ---- #}
+    <div class="podium">
+        {% set order = [1, 0, 2] %}  {# render 2nd, 1st, 3rd for centered champion #}
+        {% for idx in order %}
+            {% if players|length > idx %}
+                {% set p = players[idx] %}
+                <div class="podium-spot rank-{{ idx + 1 }}">
+                    <div class="podium-medal">
+                        {% if idx == 0 %}🥇{% elif idx == 1 %}🥈{% else %}🥉{% endif %}
+                    </div>
+                    <div class="podium-avatar">{{ p.username[0] | upper }}</div>
+                    <div class="podium-name">{{ p.username }}</div>
+                    <div class="podium-score">{{ p.best_score }}</div>
+                    <div class="podium-sub">{{ p.wins }} wins · {{ p.games_played }} games</div>
+                    <div class="podium-base">{{ idx + 1 }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {# ---- Remaining players ---- #}
+    {% if rest %}
+    <div class="panel lb-panel">
+        <table class="data-table lb-table">
+            <thead>
+                <tr><th>Rank</th><th>Player</th><th>Best Score</th><th>Wins</th><th>Games</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+                {% for p in rest %}
+                <tr>
+                    <td><span class="rank-num">{{ loop.index + 3 }}</span></td>
+                    <td>
+                        <span class="lb-player">
+                            <span class="lb-avatar">{{ p.username[0] | upper }}</span>
+                            {{ p.username }}
+                        </span>
+                    </td>
+                    <td class="pts">{{ p.best_score }}</td>
+                    <td>{{ p.wins }}</td>
+                    <td>{{ p.games_played }}</td>
+                    <td class="muted">{{ p.total_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% else %}
+<div class="empty-state">
+    <span class="empty-emoji">🏅</span>
+    <p>No games played yet. Be the first to claim the top spot!</p>
+    <a class="btn" href="{{ url_for('play') }}">Play Now</a>
+</div>
+{% endif %}
+{% endblock %}

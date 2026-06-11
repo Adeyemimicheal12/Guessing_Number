@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in | NumberQuest admin</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: "Roboto", "Segoe UI", -apple-system, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        background: #f8f8f8;
+        line-height: 1.45;
+    }
+    a { color: #447e9b; text-decoration: none; }
+    a:hover { color: #036; }
+
+    /* Header */
+    #header {
+        padding: 14px 40px;
+        background: #417690;
+        color: #ffc;
+    }
+    #header h1 { margin: 0; font-weight: 300; font-size: 22px; }
+    #header h1 a { color: #f5dd5d; }
+
+    .breadcrumbs {
+        background: #79aec8;
+        padding: 10px 40px;
+        color: #fff;
+        font-size: 14px;
+        border-top: 1px solid #fff;
+    }
+    .breadcrumbs a { color: #fff; }
+
+    /* Login card */
+    .login-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 40px 16px;
+    }
+    #content {
+        width: 28em;
+        max-width: 100%;
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    #content > h2 {
+        margin: 0;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        background: #79aec8;
+        color: #fff;
+    }
+    .form-body { padding: 20px 24px 26px; }
+
+    .errornote {
+        background: #ba2121;
+        color: #fff;
+        padding: 10px 12px;
+        border-radius: 4px;
+        margin-bottom: 18px;
+        font-size: 13px;
+    }
+
+    .form-row { margin-bottom: 18px; }
+    .form-row label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+    }
+    .form-row input {
+        width: 100%;
+        padding: 9px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        background: #fff;
+    }
+    .form-row input:focus {
+        outline: none;
+        border-color: #79aec8;
+        box-shadow: 0 0 0 2px rgba(121,174,200,0.35);
+    }
+
+    .submit-row { margin-top: 22px; }
+    .submit-row input {
+        width: 100%;
+        background: #79aec8;
+        color: #fff;
+        border: none;
+        padding: 11px 15px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .submit-row input:hover { background: #609ab6; }
+
+    .back-link {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 13px;
+    }
+    .hint { color: #999; font-size: 12px; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div id="header">
+    <h1><a href="{{ url_for('index') }}">NumberQuest administration</a></h1>
+</div>
+<div class="breadcrumbs">
+    <a href="{{ url_for('index') }}">Home</a> &rsaquo; Log in
+</div>
+
+<div class="login-wrap">
+    <div id="content">
+        <h2>Log in</h2>
+        <div class="form-body">
+            {% if error %}
+            <p class="errornote">{{ error }}</p>
+            {% endif %}
+            <form method="post" action="{{ url_for('admin') }}">
+                <div class="form-row">
+                    <label for="id_username">Username:</label>
+                    <input type="text" name="username" id="id_username" autofocus required>
+                </div>
+                <div class="form-row">
+                    <label for="id_password">Password:</label>
+                    <input type="password" name="password" id="id_password" required>
+                </div>
+                <div class="submit-row">
+                    <input type="submit" value="Log in">
+                </div>
+            </form>
+            <p class="back-link"><a href="{{ url_for('index') }}">&larr; Back to site</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

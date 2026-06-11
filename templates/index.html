@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="home-hero">
+    <div class="hero-orbs" aria-hidden="true">
+        <span class="orb orb-1">7</span>
+        <span class="orb orb-2">42</span>
+        <span class="orb orb-3">3</span>
+        <span class="orb orb-4">128</span>
+        <span class="orb orb-5">?</span>
+    </div>
+    <div class="hero-inner">
+        <span class="home-badge">🎯 The thinking player's guessing game</span>
+        <h1>Number<span class="hero-accent">Quest</span></h1>
+        <p class="tagline">Lock onto the secret number with nothing but logic and your
+        instincts. Three escalating levels, a global leaderboard, and bragging rights on the line.</p>
+        <div class="home-cta">
+            {% if current_user %}
+                <a class="btn btn-lg btn-shine" href="{{ url_for('play') }}">▶ Start Playing</a>
+                <a class="btn btn-outline btn-lg" href="{{ url_for('leaderboard') }}">View Leaderboard</a>
+            {% else %}
+                <a class="btn btn-lg btn-shine" href="{{ url_for('register') }}">Get Started — It's Free</a>
+                <a class="btn btn-outline btn-lg" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+        <div class="hero-stats">
+            <div><b>3</b><span>Difficulty levels</span></div>
+            <div><b>9,999</b><span>Top range</span></div>
+            <div><b>900</b><span>Max points</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <h2 class="section-title">Why you'll love it</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <span class="feature-icon">🎮</span>
+            <h3>How to Play</h3>
+            <p>We pick a secret number within a range. Enter your guesses and use the
+               <strong>Too High / Too Low</strong> hints to close in before your attempts run out.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🏆</span>
+            <h3>Compete</h3>
+            <p>Earn points based on how few attempts you take. Climb the global leaderboard
+               and track your wins, games played and best score from your profile.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🔒</span>
+            <h3>Secure</h3>
+            <p>Your account is protected with hashed passwords and session-based
+               authentication. Register once and your progress is always saved.</p>
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <h2 class="section-title">Pick your difficulty</h2>
+    <p class="section-sub muted">From a relaxed warm-up to a true four-digit hunt.</p>
+
+    {% set meta = {
+        'low':      {'icon': '🟢', 'tag': 'Beginner'},
+        'moderate': {'icon': '🟡', 'tag': 'Challenger'},
+        'expert':   {'icon': '🔴', 'tag': 'Mastermind'}
+    } %}
+
+    <div class="play-grid">
+        {% for key, lvl in levels.items() %}
+        {% set m = meta[key] %}
+        <div class="play-card play-{{ key }}">
+            <div class="play-card-top">
+                <span class="play-icon">{{ m.icon }}</span>
+                <span class="play-tag">{{ m.tag }}</span>
+            </div>
+            <h3>{{ lvl.label }}</h3>
+            <div class="play-range">
+                <span class="range-label">Guess a number between</span>
+                <span class="range-nums"><b>0</b> &ndash; <b>{{ lvl.max }}</b></span>
+            </div>
+            <ul class="play-specs">
+                <li><span class="spec-icon">🎲</span> {{ lvl.attempts }} attempts allowed</li>
+                <li><span class="spec-icon">⭐</span> Up to {{ lvl.base }} points</li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="home-final">
+    <h2>Ready to test your instincts?</h2>
+    <p class="muted">Jump in and see how few guesses it takes.</p>
+    {% if current_user %}
+        <a class="btn btn-lg" href="{{ url_for('play') }}">▶ Play Now</a>
+    {% else %}
+        <a class="btn btn-lg" href="{{ url_for('register') }}">Create Your Account</a>
+    {% endif %}
+</section>
+
+{% endblock %}
